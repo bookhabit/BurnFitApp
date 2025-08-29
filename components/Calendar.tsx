@@ -4,10 +4,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    View
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -183,10 +183,9 @@ const Calendar: React.FC = () => {
               key={dayIndex}
               style={[
                 styles.day,
-                { backgroundColor: theme.surface },
                 !day.isCurrentMonth && styles.otherMonthDay,
-                day.isToday && [styles.today, { borderColor: theme.primary }],
-                day.isSelected && [styles.selectedDay, { backgroundColor: theme.primary }],
+                day.isToday && [styles.today, { borderColor: theme.primary, borderRadius: 50 }],
+                day.isSelected && [styles.selectedDay, { borderColor: theme.primary, borderRadius: 50 }],
               ]}
               onPress={() => handleDatePress(day)}>
               <TextBox
@@ -195,7 +194,7 @@ const Calendar: React.FC = () => {
                   { color: theme.text },
                   !day.isCurrentMonth && styles.otherMonthDayText,
                   day.isToday && styles.todayText,
-                  day.isSelected && [styles.selectedDayText, { color: theme.background }],
+                  day.isSelected && [styles.selectedDayText, ],
                   day.dayOfWeek === 0 && styles.sundayText,
                 ]}>
                 {day.day}
@@ -206,7 +205,7 @@ const Calendar: React.FC = () => {
       ))}
 
       {/* 드래그 영역 - 마지막 row 밑에 border */}
-      <View style={[styles.dragArea, { borderColor: theme.border }]}>
+      <View style={[styles.dragArea, ]}>
         <View style={[styles.dragIndicator, { backgroundColor: theme.border }]} />
       </View>
 
@@ -267,10 +266,9 @@ const renderWeekView = () => {
             key={dayIndex}
             style={[
               styles.day,
-              { backgroundColor: theme.surface },
               !day.isCurrentMonth && styles.otherMonthDay,
-              day.isToday && [styles.today, { borderColor: theme.primary }],
-              day.isSelected && [styles.selectedDay, { backgroundColor: theme.primary }],
+              day.isToday && [styles.today, { borderColor: theme.primary ,borderRadius: 50}],
+              day.isSelected && [styles.selectedDay, { borderColor: theme.primary,borderRadius: 50 }],
             ]}
             onPress={() => handleDatePress(day)}>
             <TextBox
@@ -279,7 +277,7 @@ const renderWeekView = () => {
                 { color: theme.text },
                 !day.isCurrentMonth && styles.otherMonthDayText,
                 day.isToday && styles.todayText,
-                day.isSelected && [styles.selectedDayText, { color: theme.background }],
+                day.isSelected && [styles.selectedDayText],
                 day.dayOfWeek === 0 && styles.sundayText,
               ]}>
               {day.day}
@@ -289,7 +287,7 @@ const renderWeekView = () => {
       </View>
 
       {/* 드래그 영역 - 마지막 row 밑에 border */}
-      <View style={[styles.dragArea, { borderColor: theme.border }]}>
+      <View style={[styles.dragArea]}>
         <View style={[styles.dragIndicator, { backgroundColor: theme.border }]} />
       </View>
 
@@ -364,7 +362,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 2,
-    borderRadius: 8,
   },
   otherMonthDay: {
     opacity: 0.5,
@@ -379,7 +376,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   selectedDay: {
-    borderWidth: 3,
+    borderWidth: 1,
   },
   selectedDayText: {
     fontWeight: 'bold',
