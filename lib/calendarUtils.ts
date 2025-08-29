@@ -149,18 +149,22 @@ export const generateMonthCalendar = (
   }
 
   // 마지막 주의 다음 달 날짜들
+  // 현재 월의 마지막 날 다음 날부터 시작
+  const lastDayOfMonth = dayjs().year(year).month(month).date(daysInMonth);
+  let nextMonthDate = lastDayOfMonth.add(1, 'day');
+  
   while (currentWeek.length < 7) {
     currentWeek.push({
-      date: currentDate,
-      day: currentDate.date(),
-      month: currentDate.month(),
-      year: currentDate.year(),
+      date: nextMonthDate,
+      day: nextMonthDate.date(),
+      month: nextMonthDate.month(),
+      year: nextMonthDate.year(),
       isCurrentMonth: false,
-      isToday: isToday(currentDate),
-      isSelected: isSelectedDate(currentDate, selectedDate),
-      dayOfWeek: currentDate.day(),
+      isToday: isToday(nextMonthDate),
+      isSelected: isSelectedDate(nextMonthDate, selectedDate),
+      dayOfWeek: nextMonthDate.day(),
     });
-    currentDate = currentDate.add(1, 'day');
+    nextMonthDate = nextMonthDate.add(1, 'day');
   }
 
   if (currentWeek.length > 0) {
