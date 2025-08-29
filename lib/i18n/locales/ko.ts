@@ -10,7 +10,7 @@ export const ko = {
   // 홈 화면
   home: {
     title: '홈',
-    welcome: '환영합니다',
+    welcome: '번핏',
     todayWorkout: '오늘의 운동',
     recentActivity: '최근 활동',
     startWorkout: '운동 시작하기',

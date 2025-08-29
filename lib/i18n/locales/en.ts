@@ -10,7 +10,7 @@ export const en = {
   // Home Screen
   home: {
     title: 'Home',
-    welcome: 'Welcome',
+    welcome: 'BURNFIT',
     todayWorkout: 'Today\'s Workout',
     recentActivity: 'Recent Activity',
     startWorkout: 'Start Workout',

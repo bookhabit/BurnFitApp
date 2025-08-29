@@ -10,7 +10,7 @@ export const ja = {
   // ホーム画面
   home: {
     title: 'ホーム',
-    welcome: 'ようこそ',
+    welcome: 'バンフィット',
     todayWorkout: '今日のワークアウト',
     recentActivity: '最近の活動',
     startWorkout: 'ワークアウト開始',

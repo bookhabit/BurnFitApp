@@ -1,6 +1,7 @@
 
 import { darkTheme, lightTheme } from '@/constants/colors';
 import { FontKeys, fonts } from '@/constants/fonts';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import React from 'react';
 import { StyleSheet, Text, TextProps } from 'react-native';
@@ -92,6 +93,93 @@ const TextBox: React.FC<TextBoxProps> = ({
 }) => {
 
   const { isDarkMode } = useTheme();
+  const { currentLanguage } = useLanguage();
+
+  // 언어에 따른 폰트 자동 선택
+  const getLanguageAppropriateFont = (variant: VariantKeys) => {
+    const baseFont = textStyles[variant].fontFamily;
+    
+    switch (currentLanguage) {
+      case 'ja':
+        // 일본어: 일본어 폰트 우선, fallback으로 시스템 폰트
+        if (baseFont === fonts.BMJUA) {
+          return fonts.Japanese || 'System';
+        }
+        return fonts.Japanese || 'System';
+      
+      case 'ko':
+        // 한국어: BMJUA 우선, fallback으로 Pretendard
+        if (baseFont === fonts.BMJUA) {
+          return fonts.BMJUA;
+        }
+        return baseFont;
+      
+      case 'en':
+      case 'vi':
+        // 영어/베트남어: Pretendard 사용
+        return baseFont;
+      
+      default:
+        return baseFont;
+    }
+  };
+
+  // 언어와 폰트에 따른 lineHeight 자동 설정
+  const getLanguageAppropriateLineHeight = (variant: VariantKeys) => {
+    const baseFontSize = size || textStyles[variant].fontSize;
+    
+    // variant별 기본 lineHeight 계수
+    let baseLineHeightRatio = 1.25; // 기본값
+    
+    // variant별 조정
+    switch (true) {
+      case variant.startsWith('title'):
+        baseLineHeightRatio = 1.2; // 제목은 더 조밀하게
+        break;
+      case variant.startsWith('body'):
+        baseLineHeightRatio = 1.3; // 본문은 적당하게
+        break;
+      case variant.startsWith('button'):
+        baseLineHeightRatio = 1.25; // 버튼은 기본값
+        break;
+      case variant.startsWith('caption'):
+        baseLineHeightRatio = 1.4; // 캡션은 더 넓게
+        break;
+      default:
+        baseLineHeightRatio = 1.25; // 기본값
+        break;
+    }
+    
+    // 언어별 추가 조정
+    switch (currentLanguage) {
+      case 'en':
+        // 영어: 더 넓은 lineHeight (영어는 대문자와 소문자 높이 차이가 큼)
+        baseLineHeightRatio += 0.15;
+        break;
+      
+      case 'ja':
+        // 일본어: 적당한 lineHeight
+        baseLineHeightRatio += 0.05;
+        break;
+      
+      case 'ko':
+        // 한국어: BMJUA는 더 넓은 lineHeight 필요
+        if (textStyles[variant].fontFamily === fonts.BMJUA) {
+          baseLineHeightRatio += 0.1;
+        }
+        break;
+      
+      case 'vi':
+        // 베트남어: 기본값 유지
+        break;
+      
+      default:
+        // 기본값 유지
+        break;
+    }
+    
+    return baseFontSize * baseLineHeightRatio;
+  };
 
   // 동적 스타일 계산을 Hook 호출 이후에 수행하고 useMemo로 최적화
   const dynamicStyles = React.useMemo(
@@ -99,11 +187,12 @@ const TextBox: React.FC<TextBoxProps> = ({
       ...textStyles[variant],
       fontFamily: fontsName
         ? fonts[fontsName || 'Pretendard500']
-        : textStyles[variant].fontFamily,
+        : getLanguageAppropriateFont(variant),
       fontSize: size || textStyles[variant].fontSize, // size가 있으면 덮어쓰기
       color: TextColor ? TextColor : isDarkMode ? darkTheme.text : lightTheme.text,
+      lineHeight: _lineHeight || getLanguageAppropriateLineHeight(variant),
     }),
-    [fontsName, size, TextColor, isDarkMode, variant]
+    [fontsName, size, TextColor, isDarkMode, variant, currentLanguage]
   );
 
   return (

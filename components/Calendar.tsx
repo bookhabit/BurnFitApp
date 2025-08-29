@@ -149,7 +149,7 @@ const Calendar: React.FC = () => {
           <TouchableOpacity
             onPress={handleHeaderPress}
             style={styles.headerTitleContainer}>
-            <TextBox style={[styles.headerTitle, { color: theme.text }]}>
+            <TextBox variant="title3" style={{ color: theme.text }}>
               {calendarData.monthView.year} {t('calendar.year')}{' '}
               {t(`calendar.months.${calendarData.monthView.month}`)}
             </TextBox>
@@ -165,8 +165,8 @@ const Calendar: React.FC = () => {
         {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => (
           <View key={dayIndex} style={styles.dayHeader}>
             <TextBox  
+              variant="body4"
               style={[
-                styles.dayHeaderText,
                 dayIndex === 0 && styles.sundayText,
               ]}>
               {t(`calendar.days.${dayIndex}`)}
@@ -190,8 +190,8 @@ const Calendar: React.FC = () => {
               ]}
               onPress={() => handleDatePress(day)}>
               <TextBox
+                variant="body2"
                 style={[
-                  styles.dayText,
                   { color: theme.text },
                   !day.isCurrentMonth && styles.otherMonthDayText,
                   day.isToday && styles.todayText,
@@ -204,6 +204,11 @@ const Calendar: React.FC = () => {
           ))}
         </View>
       ))}
+
+      {/* 드래그 영역 - 마지막 row 밑에 border */}
+      <View style={[styles.dragArea, { borderColor: theme.border }]}>
+        <View style={[styles.dragIndicator, { backgroundColor: theme.border }]} />
+      </View>
 
       {/* DatePicker 모달 */}
       {renderDatePickerModal()}
@@ -229,10 +234,9 @@ const renderWeekView = () => {
         <TouchableOpacity
           onPress={handleHeaderPress}
           style={styles.headerTitleContainer}>
-          <TextBox style={[styles.headerTitle, { color: theme.text }]}>
+          <TextBox variant="title3" style={{ color: theme.text }}>
             {calendarData.monthView.year} {t('calendar.year')}{' '}
-            {t(`calendar.months.${calendarData.monthView.month}`)} {currentWeekNumber}
-            {t('calendar.weekNumber')}
+            {t(`calendar.months.${calendarData.monthView.month}`)}
           </TextBox>
         </TouchableOpacity>
 
@@ -246,8 +250,8 @@ const renderWeekView = () => {
         {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => (
           <View key={dayIndex} style={styles.dayHeader}>
             <TextBox
+              variant="body4"
               style={[
-                styles.dayHeaderText,
                 dayIndex === 0 && styles.sundayText,
               ]}>
               {t(`calendar.days.${dayIndex}`)}
@@ -270,8 +274,8 @@ const renderWeekView = () => {
             ]}
             onPress={() => handleDatePress(day)}>
             <TextBox
+              variant="body2"
               style={[
-                styles.dayText,
                 { color: theme.text },
                 !day.isCurrentMonth && styles.otherMonthDayText,
                 day.isToday && styles.todayText,
@@ -282,6 +286,11 @@ const renderWeekView = () => {
             </TextBox>
           </TouchableOpacity>
         ))}
+      </View>
+
+      {/* 드래그 영역 - 마지막 row 밑에 border */}
+      <View style={[styles.dragArea, { borderColor: theme.border }]}>
+        <View style={[styles.dragIndicator, { backgroundColor: theme.border }]} />
       </View>
 
       {/* DatePicker 모달 */}
@@ -318,10 +327,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   headerSubtitle: {
     fontSize: 12,
     marginTop: 4,
@@ -346,10 +351,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
   },
-  dayHeaderText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
   sundayText: {
     color: '#ff4444',
   },
@@ -364,10 +365,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 2,
     borderRadius: 8,
-  },
-  dayText: {
-    fontSize: 16,
-    fontWeight: '500',
   },
   otherMonthDay: {
     opacity: 0.5,
@@ -433,8 +430,19 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: '#f0f0f0',
   },
-  cancelButtonText: {
-    textAlign: 'center',
-    fontWeight: '600',
+  dragArea: {
+    height: 20, // 드래그 영역의 높이를 늘려서 터치하기 쉽게
+    marginTop: 20, // 드래그 영역 위에 여백
+    marginBottom: 10, // 드래그 영역 아래에 여백
+    borderBottomWidth: 2, // 하단에 테두리 추가
+    borderBottomColor: 'transparent', // 초기에는 투명하게 설정
+    justifyContent: 'center', // 세로 중앙 정렬
+    alignItems: 'center', // 가로 중앙 정렬
+  },
+  dragIndicator: {
+    width: 60, // 드래그 표시의 너비를 늘림
+    height: 4, // 드래그 표시의 높이
+    borderRadius: 2, // 드래그 표시의 둥근 정도
+    opacity: 0.6, // 투명도 조절
   },
 });

@@ -10,7 +10,7 @@ export const vi = {
   // Màn hình chính
   home: {
     title: 'Trang chủ',
-    welcome: 'Chào mừng',
+    welcome: 'BURNFIT',
     todayWorkout: 'Bài tập hôm nay',
     recentActivity: 'Hoạt động gần đây',
     startWorkout: 'Bắt đầu tập luyện',
