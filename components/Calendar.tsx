@@ -1,6 +1,7 @@
 import Entypo from '@expo/vector-icons/Entypo';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Modal,
     StyleSheet,
@@ -10,13 +11,14 @@ import {
 } from 'react-native';
 import { darkTheme, lightTheme } from '../constants/colors';
 import { useCalendar } from '../hooks/useCalendar';
-import { CalendarDay, getMonthName } from '../lib/calendarUtils';
+import { CalendarDay } from '../lib/calendarUtils';
 import TextBox from './basic/TextBox';
 
 
 const Calendar: React.FC = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const { t } = useTranslation();
   
   const {
     calendarData,
@@ -87,7 +89,7 @@ const Calendar: React.FC = () => {
           <View style={styles.header}>
             <TouchableOpacity
               onPress={goToPreviousMonth}
-              style={[styles.navButton, { backgroundColor: theme.surface }]}>
+              style={[styles.navButton]}>
               <Entypo name="chevron-left" size={24} color="black" />
             </TouchableOpacity>
 
@@ -95,27 +97,26 @@ const Calendar: React.FC = () => {
               onPress={handleHeaderPress}
               style={styles.headerTitleContainer}>
               <TextBox style={[styles.headerTitle, { color: theme.text }]}>
-                {calendarData.monthView.year}년{' '}
-                {getMonthName(calendarData.monthView.month)}
+                {calendarData.monthView.year} {t('calendar.year')}{' '}
+                {t(`calendar.months.${calendarData.monthView.month}`)}
               </TextBox>
-              <TextBox style={[styles.headerSubtitle, { color: theme.inactive }]}>클릭하여 날짜 변경</TextBox>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={goToNextMonth} style={[styles.navButton, { backgroundColor: theme.surface }]}>
+            <TouchableOpacity onPress={goToNextMonth} style={[styles.navButton]}>
                 <Entypo name="chevron-right" size={24} color="black" />
             </TouchableOpacity>
           </View>
 
         {/* 요일 헤더 */}
         <View style={styles.weekHeader}>
-          {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
-            <View key={index} style={styles.dayHeader}>
+          {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => (
+            <View key={dayIndex} style={styles.dayHeader}>
               <TextBox  
                 style={[
                   styles.dayHeaderText,
-                  index === 0 && styles.sundayText,
+                  dayIndex === 0 && styles.sundayText,
                 ]}>
-                {day}
+                {t(`calendar.days.${dayIndex}`)}
               </TextBox>
             </View>
           ))}
@@ -159,7 +160,7 @@ const Calendar: React.FC = () => {
               currentView === 'month' && styles.activeViewButton,
             ]}
             onPress={() => changeView('month')}>
-            <TextBox style={styles.viewButtonText}>월</TextBox>
+            <TextBox style={styles.viewButtonText}>{t('calendar.month')}</TextBox>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -167,7 +168,7 @@ const Calendar: React.FC = () => {
               currentView === 'week' && styles.activeViewButton,
             ]}
             onPress={() => changeView('week')}>
-            <TextBox style={styles.viewButtonText}>주</TextBox>
+            <TextBox style={styles.viewButtonText}>{t('calendar.week')}</TextBox>
           </TouchableOpacity>
         </View>
 
@@ -193,36 +194,35 @@ const Calendar: React.FC = () => {
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         {/* 헤더 */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={goToPreviousWeek} style={[styles.navButton, { backgroundColor: theme.surface }]}>
-          <Entypo name="chevron-left" size={24} color={theme.text} />
+          <TouchableOpacity onPress={goToPreviousWeek} style={[styles.navButton]}>
+            <Entypo name="chevron-left" size={24} color={theme.text} />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={handleHeaderPress}
             style={styles.headerTitleContainer}>
             <TextBox style={[styles.headerTitle, { color: theme.text }]}>
-              {calendarData.monthView.year}년{' '}
-              {getMonthName(calendarData.monthView.month)} {currentWeekNumber}
-              주차
+              {calendarData.monthView.year} {t('calendar.year')}{' '}
+              {t(`calendar.months.${calendarData.monthView.month}`)} {currentWeekNumber}
+              {t('calendar.weekNumber')}
             </TextBox>
-            <TextBox style={[styles.headerSubtitle, { color: theme.inactive }]}>클릭하여 날짜 변경</TextBox>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={goToNextWeek} style={styles.navButton}>
-          <Entypo name="chevron-right" size={24} color={theme.text} />
+            <Entypo name="chevron-right" size={24} color={theme.text} />
           </TouchableOpacity>
         </View>
 
         {/* 요일 헤더 */}
         <View style={styles.weekHeader}>
-          {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
-            <View key={index} style={styles.dayHeader}>
+          {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => (
+            <View key={dayIndex} style={styles.dayHeader}>
               <TextBox
                 style={[
                   styles.dayHeaderText,
-                  index === 0 && styles.sundayText,
+                  dayIndex === 0 && styles.sundayText,
                 ]}>
-                {day}
+                {t(`calendar.days.${dayIndex}`)}
               </TextBox>
             </View>
           ))}
@@ -264,15 +264,16 @@ const Calendar: React.FC = () => {
               currentView === 'month' && styles.activeViewButton,
             ]}
             onPress={() => changeView('month')}>
-            <TextBox style={styles.viewButtonText}>월</TextBox          >
+            <TextBox style={styles.viewButtonText}>{t('calendar.month')}</TextBox>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.viewButton,
+              currentView,
               currentView === 'week' && styles.activeViewButton,
             ]}
             onPress={() => changeView('week')}>
-            <TextBox style={styles.viewButtonText}>주</TextBox>
+            <TextBox style={styles.viewButtonText}>{t('calendar.week')}</TextBox>
           </TouchableOpacity>
         </View>
 

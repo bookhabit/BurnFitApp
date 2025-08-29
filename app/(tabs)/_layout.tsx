@@ -1,6 +1,7 @@
 import { darkTheme, lightTheme } from '@/constants/colors';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, useColorScheme } from 'react-native';
 
 
@@ -10,6 +11,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function TabLayout() {
   const isDarkMode = useColorScheme() === 'dark';
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -38,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='index'
         options={{
-          title: 'HOME',
+          title: t('tabs.home'),
           tabBarIcon: ({ color, size }) => (
             <Entypo name="home" size={24} color={color} />
           ),
@@ -47,7 +49,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calendar"
         options={{
-          title: 'CALENDAR',
+          title: t('tabs.calendar'),
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="calendar" size={24} color={color} />
           ),
@@ -56,7 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="library"
         options={{
-          title: 'LIBRARY',
+          title: t('tabs.library'),
           tabBarIcon: ({ color, size }) => (
             <Entypo name="book" color={color} size={size} />
           ),
@@ -65,7 +67,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="my-page"
         options={{
-          title: 'My PAGE',
+          title: t('tabs.myPage'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="user" size={24} color={color} />
           ),
