@@ -50,10 +50,6 @@ export const en = {
       5: 'Fri',
       6: 'Sat',
     },
-    gestureHint: {
-      month: 'Drag up to switch to week view',
-      week: 'Drag down to switch to month view',
-    },
   },
 
   // Library Screen

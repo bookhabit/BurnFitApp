@@ -50,10 +50,6 @@ export const vi = {
       5: 'T6',
       6: 'T7',
     },
-    gestureHint: {
-      month: 'Kéo lên để chuyển sang chế độ xem tuần',
-      week: 'Kéo xuống để chuyển sang chế độ xem tháng',
-    },
   },
 
   // Màn hình thư viện
