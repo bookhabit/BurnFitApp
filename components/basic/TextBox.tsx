@@ -1,8 +1,9 @@
 
 import { darkTheme, lightTheme } from '@/constants/colors';
 import { FontKeys, fonts } from '@/constants/fonts';
+import { useTheme } from '@/contexts/ThemeContext';
 import React from 'react';
-import { StyleSheet, Text, TextProps, useColorScheme } from 'react-native';
+import { StyleSheet, Text, TextProps } from 'react-native';
 
 type VariantKeys =
   | 'title1'
@@ -90,7 +91,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   ...props
 }) => {
 
-  const isDarkMode = useColorScheme() === 'dark';
+  const { isDarkMode } = useTheme();
 
   // 동적 스타일 계산을 Hook 호출 이후에 수행하고 useMemo로 최적화
   const dynamicStyles = React.useMemo(

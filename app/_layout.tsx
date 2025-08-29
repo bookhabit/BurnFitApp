@@ -1,9 +1,9 @@
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { LanguageProvider } from '../contexts/LanguageContext';
+import { ThemeProvider } from '../contexts/ThemeContext';
 import '../lib/i18n';
 
 export default function RootLayout() {
@@ -25,7 +25,7 @@ export default function RootLayout() {
 
   return (
     <LanguageProvider>
-      <ThemeProvider value={DefaultTheme}>
+      <ThemeProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

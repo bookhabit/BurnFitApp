@@ -1,136 +1,62 @@
-import TextBox from '@/components/basic/TextBox'
-import { darkTheme, lightTheme } from '@/constants/colors'
-import { useLibraryData } from '@/hooks/useLibraryData'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { ScrollView, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import TextBox from '../../components/basic/TextBox';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useLibraryData } from '../../hooks/useLibraryData';
 
-const LibraryTabScreen = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const theme = isDarkMode ? darkTheme : lightTheme;
+export default function LibraryTabScreen() {
+  const { theme } = useTheme();
   const { t } = useTranslation();
-  const {
-    exercises,
-    categories,
-    searchQuery,
-    selectedCategory,
-    isLoading,
-    setSearchQuery,
-    setSelectedCategory,
-  } = useLibraryData();
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
-          <TextBox variant='body1'>{t('common.loading')}</TextBox>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const { exercises, categories } = useLibraryData();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-      <ScrollView style={{ flex: 1, backgroundColor: theme.background, padding: 20 }}>
-        <TextBox variant='title1' style={{ color: theme.text, marginBottom: 20 }}>
-          {t('library.title')}
-        </TextBox>
-
-        {/* 검색 */}
-        <TextInput
-          style={{
-            backgroundColor: theme.surface,
-            color: theme.text,
-            padding: 15,
-            borderRadius: 10,
-            marginBottom: 20,
-            fontSize: 16,
-          }}
-          placeholder={t('library.search')}
-          placeholderTextColor={theme.inactive}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-
-        {/* 카테고리 */}
-        <View style={{ marginBottom: 20 }}>
-          <TextBox variant='title3' style={{ color: theme.text, marginBottom: 15 }}>
-            {t('library.categories')}
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+        <ScrollView style={{ flex: 1, backgroundColor: theme.background, padding: 20, }} contentContainerStyle={{ gap: 20,paddingBottom:80 }}>
+          <TextBox variant='title1' style={{ color: theme.text, }}>
+            {t('library.title')}
           </TextBox>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+          <View style={{ backgroundColor: theme.surface, padding: 20, borderRadius: 15, marginBottom: 20 }}>
+            <TextBox variant='title3' style={{ color: theme.text, marginBottom: 15 }}>
+              {t('library.categories')}
+            </TextBox>
             {categories.map((category) => (
               <TouchableOpacity
                 key={category.id}
-                style={[
-                  {
-                    backgroundColor: theme.surface,
-                    padding: 15,
-                    borderRadius: 10,
-                    marginRight: 10,
-                    minWidth: 100,
-                    alignItems: 'center',
-                  },
-                  selectedCategory === category.id && { backgroundColor: theme.primary }
-                ]}
-                onPress={() => setSelectedCategory(selectedCategory === category.id ? null : category.id)}
+                style={{ 
+                  backgroundColor: theme.background, 
+                  padding: 15, 
+                  borderRadius: 10, 
+                  marginBottom: 10,
+                  alignItems: 'center' 
+                }}
               >
-                <TextBox variant='body1' style={{ fontSize: 24, marginBottom: 5 }}>
-                  {category.icon}
-                </TextBox>
-                <TextBox
-                  variant='body2'
-                  style={{
-                    color: selectedCategory === category.id ? theme.background : theme.text,
-                    textAlign: 'center',
-                  }}
-                >
+                <TextBox variant='button1' style={{ color: theme.primary }}>
                   {category.name}
-                </TextBox>
-                <TextBox
-                  variant='caption1'
-                  style={{
-                    color: selectedCategory === category.id ? theme.background : theme.inactive,
-                    textAlign: 'center',
-                  }}
-                >
-                  {category.exerciseCount} exercises
                 </TextBox>
               </TouchableOpacity>
             ))}
-          </ScrollView>
-        </View>
+          </View>
 
-        {/* 운동 목록 */}
-        <View>
-          <TextBox variant='title3' style={{ color: theme.text, marginBottom: 15 }}>
-            {t('library.exercises')}
-          </TextBox>
-          {exercises.map((exercise) => (
-            <View
-              key={exercise.id}
-              style={{
-                backgroundColor: theme.surface,
-                padding: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}
-            >
-              <TextBox variant='body1' style={{ color: theme.text, marginBottom: 5 }}>
-                {exercise.name}
-              </TextBox>
-              <TextBox variant='body2' style={{ color: theme.inactive, marginBottom: 5 }}>
-                {exercise.description}
-              </TextBox>
-              <TextBox variant='caption1' style={{ color: theme.inactive }}>
-                Difficulty: {exercise.difficulty} | Category: {exercise.category}
-              </TextBox>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  )
+          <View style={{ backgroundColor: theme.surface, padding: 20, borderRadius: 15 }}>
+            <TextBox variant='title3' style={{ color: theme.text, marginBottom: 15 }}>
+              {t('library.exercises')}
+            </TextBox>
+            {exercises.map((exercise) => (
+              <View key={exercise.id} style={{ marginBottom: 15, paddingBottom: 15, borderBottomWidth: 1, borderBottomColor: theme.border }}>
+                <TextBox variant='body1' style={{ color: theme.text, marginBottom: 10 }}>
+                  {exercise.name}
+                </TextBox>
+                <TextBox variant='body2' style={{ color: theme.inactive }}>
+                  {exercise.description}
+                </TextBox>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
-
-export default LibraryTabScreen

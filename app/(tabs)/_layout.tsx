@@ -2,15 +2,16 @@ import { darkTheme, lightTheme } from '@/constants/colors';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, useColorScheme } from 'react-native';
+import { Platform } from 'react-native';
 
 
+import { useTheme } from '@/contexts/ThemeContext';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function TabLayout() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { isDarkMode } = useTheme();
   const { t } = useTranslation();
 
   return (

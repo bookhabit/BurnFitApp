@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
@@ -6,18 +7,15 @@ import {
     Modal,
     StyleSheet,
     TouchableOpacity,
-    useColorScheme,
     View
 } from 'react-native';
-import { darkTheme, lightTheme } from '../constants/colors';
 import { useCalendar } from '../hooks/useCalendar';
 import { CalendarDay } from '../lib/calendarUtils';
 import TextBox from './basic/TextBox';
 
 
 const Calendar: React.FC = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useTheme();
   const { t } = useTranslation();
   
   const {

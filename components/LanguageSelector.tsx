@@ -1,20 +1,18 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import React, { useState } from 'react';
 import {
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { darkTheme, lightTheme } from '../constants/colors';
 import { useLanguage } from '../contexts/LanguageContext';
 import TextBox from './basic/TextBox';
 
 const LanguageSelector: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { currentLanguage, changeLanguage, t } = useLanguage();
-  const isDarkMode = useColorScheme() === 'dark';
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useTheme();
 
   const languages = [
     { code: 'ko', name: t('languages.korean') },

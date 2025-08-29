@@ -1,20 +1,17 @@
-import Calendar from '@/components/Calendar'
-import { darkTheme, lightTheme } from '@/constants/colors'
-import React from 'react'
-import { View, useColorScheme } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useColorScheme } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Calendar from '../../components/Calendar';
+import { useTheme } from '../../contexts/ThemeContext';
 
-const CalendarTabScreen = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const theme = isDarkMode ? darkTheme : lightTheme;
+export default function CalendarTabScreen() {
+  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-      <View style={{ flex: 1, backgroundColor: theme.background }}>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
         <Calendar />
-      </View>
-    </SafeAreaView>
-  )
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
-
-export default CalendarTabScreen
