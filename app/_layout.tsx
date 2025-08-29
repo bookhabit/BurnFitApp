@@ -6,7 +6,14 @@ import 'react-native-reanimated';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    PretendardBold: require('../assets/fonts/Pretendard-Bold.ttf'),
+    PretendardExtraBold: require('../assets/fonts/Pretendard-ExtraBold.ttf'),
+    PretendardLight: require('../assets/fonts/Pretendard-Light.ttf'),
+    PretendardMedium: require('../assets/fonts/Pretendard-Medium.ttf'),
+    Pretendard: require('../assets/fonts/Pretendard-Regular.ttf'),
+    PretendardSemiBold: require('../assets/fonts/Pretendard-SemiBold.ttf'),
+    PretendardThin: require('../assets/fonts/Pretendard-Thin.ttf'),
+    BMJUA: require('../assets/fonts/BMJUA.ttf'),
   });
 
   if (!loaded) {
