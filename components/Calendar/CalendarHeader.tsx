@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/ThemeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -20,11 +21,16 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   onHeaderPress,
 }) => {
   const { t } = useTranslation();
+  const { isDarkMode } = useTheme();
 
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={onPrevious} style={styles.navButton}>
-        <Entypo name="chevron-left" size={24} color="#000" />
+        <Entypo
+          name="chevron-left"
+          size={24}
+          color={isDarkMode ? "#fff" : "#000"}
+        />
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -37,7 +43,11 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onNext} style={styles.navButton}>
-        <Entypo name="chevron-right" size={24} color="#000" />
+        <Entypo
+          name="chevron-right"
+          size={24}
+          color={isDarkMode ? "#fff" : "#000"}
+        />
       </TouchableOpacity>
     </View>
   );
