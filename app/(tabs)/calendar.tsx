@@ -1,6 +1,6 @@
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Calendar from '../../components/Calendar';
-import { useTheme } from '../../contexts/ThemeContext';
+import Calendar from "@/components/Calendar/Calendar";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function CalendarTabScreen() {
   const { theme } = useTheme();
