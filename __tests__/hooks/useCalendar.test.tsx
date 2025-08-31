@@ -288,4 +288,87 @@ describe("useCalendar", () => {
       expect(result.current.calendarData.weekView).not.toEqual(initialWeekView);
     });
   });
+
+  describe("뷰 변경 시 선택된 날짜/오늘 날짜 표시", () => {
+    test("TC-CAL-020: 주 뷰로 변경 시 선택된 날짜 기준의 주가 표시되는지 확인", () => {
+      const { result } = renderHook(() => useCalendar());
+
+      const targetDate = dayjs().date(10); // 10일
+      const selectedDate = dayjs().date(15); // 15일
+
+      act(() => {
+        result.current.selectDate(selectedDate);
+      });
+
+      act(() => {
+        result.current.changeView("week");
+      });
+
+      const selectedWeek = result.current.calendarData.monthView.weeks.find(
+        (week) => week.days.some((day) => day.isSelected)
+      );
+
+      expect(selectedWeek).toBeDefined();
+      expect(selectedWeek!.days.some((day) => day.isSelected)).toBe(true);
+      expect(
+        selectedWeek!.days.some((day) => day.date.isSame(selectedDate, "day"))
+      ).toBe(true);
+    });
+
+    test("TC-CAL-021: 주 뷰로 변경 시 오늘 날짜 기준의 주가 표시되는지 확인", () => {
+      const { result } = renderHook(() => useCalendar());
+
+      const today = dayjs();
+      const todayWeek = result.current.calendarData.monthView.weeks.find(
+        (week) => week.days.some((day) => day.isToday)
+      );
+
+      act(() => {
+        result.current.changeView("week");
+      });
+
+      expect(result.current.currentView).toBe("week");
+      expect(todayWeek).toBeDefined();
+      expect(todayWeek!.days.some((day) => day.isToday)).toBe(true);
+    });
+
+    test("TC-CAL-022: 주 뷰로 변경 시 우선순위가 올바르게 적용되는지 확인", () => {
+      const { result } = renderHook(() => useCalendar());
+
+      const selectedDate = dayjs().date(15); // 15일
+      const today = dayjs();
+
+      act(() => {
+        result.current.selectDate(selectedDate);
+      });
+
+      act(() => {
+        result.current.changeView("week");
+      });
+
+      const selectedWeek = result.current.calendarData.monthView.weeks.find(
+        (week) => week.days.some((day) => day.isSelected)
+      );
+
+      expect(selectedWeek).toBeDefined();
+      expect(selectedWeek!.days.some((day) => day.isSelected)).toBe(true);
+      expect(
+        selectedWeek!.days.some((day) => day.date.isSame(selectedDate, "day"))
+      ).toBe(true);
+
+      act(() => {
+        result.current.changeView("month");
+      });
+
+      expect(result.current.currentView).toBe("month");
+
+      act(() => {
+        result.current.changeView("week");
+      });
+
+      expect(result.current.currentView).toBe("week");
+      expect(selectedWeek).toBeDefined();
+      expect(selectedWeek!.days.some((day) => day.isSelected)).toBe(true);
+    });
+  });
 });
