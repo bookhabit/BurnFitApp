@@ -9,8 +9,8 @@ import Animated from "react-native-reanimated";
 import { useCalendar } from "../../hooks/useCalendar";
 import { useCalendarGestures } from "../../hooks/useCalendarGestures";
 import { useDatePicker } from "../../hooks/useDatePicker";
+import { DatePickerModal } from "../modal/DatePickerModal";
 import { CalendarView } from "./CalendarView";
-import { DatePickerModal } from "./DatePickerModal";
 import { WeekView } from "./WeekView";
 
 const Calendar: React.FC = () => {

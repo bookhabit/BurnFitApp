@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { CalendarDay as CalendarDayType } from "../../lib/calendarUtils";
+import { DragIndicator } from "../basic/DragIndicator";
 import { CalendarDay } from "./CalendarDay";
 import { CalendarHeader } from "./CalendarHeader";
-import { DragIndicator } from "./DragIndicator";
 import { WeekHeader } from "./WeekHeader";
 
 interface CalendarViewProps {
