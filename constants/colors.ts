@@ -8,6 +8,10 @@ export const palette = {
     light: '#FFFFFF',
     dark: '#000000',
   },
+  selectedBorder:{
+    light: '#000000',
+    dark: '#FFFFFF',
+  },
   surface: {
     light: '#F5F5F5',
     dark: '#1A1A1A',
@@ -33,6 +37,7 @@ export const lightTheme = {
   text: palette.text.light,
   border: palette.border.light,
   inactive: palette.inactive.light,
+  selectedBorder: palette.selectedBorder.light,
 };
 
 export const darkTheme = {
@@ -42,4 +47,5 @@ export const darkTheme = {
   text: palette.text.dark,
   border: palette.border.dark,
   inactive: palette.inactive.dark,
+  selectedBorder: palette.selectedBorder.dark,
 };

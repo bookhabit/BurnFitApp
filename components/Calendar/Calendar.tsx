@@ -9,6 +9,7 @@ import Animated from "react-native-reanimated";
 import { useCalendar } from "../../hooks/useCalendar";
 import { useCalendarGestures } from "../../hooks/useCalendarGestures";
 import { useDatePicker } from "../../hooks/useDatePicker";
+import { CalendarDay as CalendarDayType } from "../../lib/calendarUtils";
 import { DatePickerModal } from "../modal/DatePickerModal";
 import { CalendarView } from "./CalendarView";
 import { WeekView } from "./WeekView";
@@ -48,7 +49,7 @@ const Calendar: React.FC = () => {
     changeView,
   });
 
-  const handleDatePress = (day: any) => {
+  const handleDatePress = (day: CalendarDayType) => {
     selectDate(day.date);
   };
 

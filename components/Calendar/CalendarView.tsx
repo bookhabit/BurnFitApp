@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { lightTheme } from "../../constants/colors";
 import { CalendarDay as CalendarDayType } from "../../lib/calendarUtils";
 import { DragIndicator } from "../basic/DragIndicator";
 import { CalendarDay } from "./CalendarDay";
@@ -14,7 +15,7 @@ interface CalendarViewProps {
   onNext: () => void;
   onHeaderPress: () => void;
   onDatePress: (day: CalendarDayType) => void;
-  theme: any;
+  theme: typeof lightTheme;
 }
 
 export const CalendarView: React.FC<CalendarViewProps> = ({

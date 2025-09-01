@@ -5,13 +5,14 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
+import { lightTheme } from "../../constants/colors";
 import { CalendarDay as CalendarDayType } from "../../lib/calendarUtils";
 import TextBox from "../basic/TextBox";
 
 interface CalendarDayProps {
   day: CalendarDayType;
   onPress: (day: CalendarDayType) => void;
-  theme: any;
+  theme: typeof lightTheme;
 }
 
 export const CalendarDay: React.FC<CalendarDayProps> = ({
@@ -19,6 +20,7 @@ export const CalendarDay: React.FC<CalendarDayProps> = ({
   onPress,
   theme,
 }) => {
+
   const getDayStyle = (): ViewStyle[] => {
     const baseStyle: ViewStyle[] = [styles.day];
 
@@ -32,6 +34,10 @@ export const CalendarDay: React.FC<CalendarDayProps> = ({
 
     if (day.isSelected) {
       baseStyle.push(styles.selectedDay);
+      // 선택된 날짜의 테두리 색상 설정
+      baseStyle.push({
+        borderColor: theme.selectedBorder
+      });
     }
 
     return baseStyle;
@@ -91,7 +97,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   today: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 50,
   },
   todayText: {
