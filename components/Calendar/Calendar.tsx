@@ -1,6 +1,12 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import React, { useMemo, useCallback } from "react";
-import { StyleSheet } from "react-native";
+import React, {
+  useMemo,
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
+import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -11,11 +17,22 @@ import { useCalendarGestures } from "../../hooks/useCalendarGestures";
 import { useDatePicker } from "../../hooks/useDatePicker";
 import { CalendarDay as CalendarDayType } from "../../lib/calendarUtils";
 import { DatePickerModal } from "../modal/DatePickerModal";
+import { AddExerciseModal } from "../modals/AddExerciseModal";
+import {
+  ExerciseRecordList,
+  ExerciseRecordListRef,
+} from "./ExerciseRecordList";
 import { CalendarView } from "./CalendarView";
 import { WeekView } from "./WeekView";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { initExerciseDatabase } from "../../lib/database/exerciseDB";
+import dayjs from "dayjs";
 
 const Calendar: React.FC = () => {
   const { theme } = useTheme();
+  const [showAddExerciseModal, setShowAddExerciseModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | undefined>();
+  const exerciseListRef = useRef<ExerciseRecordListRef>(null);
 
   const {
     calendarData,
@@ -39,6 +56,11 @@ const Calendar: React.FC = () => {
     handleDatePickerChange,
     handleDatePickerCancel,
   } = useDatePicker({ goToDate });
+
+  // 데이터베이스 초기화
+  useEffect(() => {
+    initExerciseDatabase().catch(console.error);
+  }, []);
 
   // 제스처 설정을 메모이제이션
   const gestureConfig = useMemo(
@@ -73,6 +95,12 @@ const Calendar: React.FC = () => {
   const handleDatePress = useCallback(
     (day: CalendarDayType) => {
       selectDate(day.date);
+      // 날짜 선택 시 selectedDate 업데이트
+      if (typeof day.date === "string") {
+        setSelectedDate(day.date);
+      } else {
+        setSelectedDate(day.date.format("YYYY-MM-DD"));
+      }
     },
     [selectDate]
   );
@@ -98,6 +126,20 @@ const Calendar: React.FC = () => {
     calendarData.monthView.year,
     calendarData.monthView.month,
   ]);
+
+  // 플로팅 버튼 클릭 핸들러
+  const handleFloatingButtonPress = useCallback(() => {
+    setShowAddExerciseModal(true);
+  }, []);
+
+  // 운동 기록 추가 완료 핸들러
+  const handleExerciseAdded = useCallback(() => {
+    // 운동 기록 목록 새로고침
+    if (exerciseListRef.current) {
+      exerciseListRef.current.refresh();
+    }
+    // console.log 제거 - 불필요한 로그 출력 방지
+  }, []);
 
   // 월뷰 렌더링을 메모이제이션
   const monthView = useMemo(() => {
@@ -161,30 +203,92 @@ const Calendar: React.FC = () => {
   }, [currentView, monthView, weekView]);
 
   return (
-    <GestureHandlerRootView style={styles.gestureRoot}>
-      <GestureDetector gesture={composed}>
-        <Animated.View style={[styles.calendarContainer, animatedStyle]}>
-          {currentViewComponent}
+    <View style={{ flex: 1 }}>
+      <GestureHandlerRootView style={styles.gestureRoot}>
+        <GestureDetector gesture={composed}>
+          <Animated.View style={[styles.calendarContainer, animatedStyle]}>
+            {/* 캘린더 뷰 */}
+            <View style={styles.calendarSection}>{currentViewComponent}</View>
+          </Animated.View>
+        </GestureDetector>
+      </GestureHandlerRootView>
 
-          <DatePickerModal
-            visible={showDatePicker}
-            value={tempDate}
-            mode={pickerMode}
-            onChange={handleDatePickerChange}
-            onRequestClose={handleDatePickerCancel}
-          />
-        </Animated.View>
-      </GestureDetector>
-    </GestureHandlerRootView>
+      {/* 운동 기록 목록 */}
+      <View style={styles.exerciseSection}>
+        <ExerciseRecordList
+          ref={exerciseListRef}
+          selectedDate={selectedDate}
+          onRefresh={handleExerciseAdded}
+        />
+      </View>
+
+      {/* 플로팅 액션 버튼 */}
+      <TouchableOpacity
+        style={[styles.floatingButton, { backgroundColor: theme.primary }]}
+        onPress={handleFloatingButtonPress}
+        activeOpacity={0.8}
+      >
+        <AntDesign name="plus" size={24} color={theme.background} />
+      </TouchableOpacity>
+
+      {/* 운동 기록 추가 모달 */}
+      <AddExerciseModal
+        visible={showAddExerciseModal}
+        onClose={() => setShowAddExerciseModal(false)}
+        selectedDate={selectedDate}
+        onExerciseAdded={handleExerciseAdded}
+      />
+
+      <DatePickerModal
+        visible={showDatePicker}
+        value={tempDate}
+        mode={pickerMode}
+        onChange={handleDatePickerChange}
+        onRequestClose={handleDatePickerCancel}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   gestureRoot: {
     flex: 1,
+    minHeight: "30%",
   },
   calendarContainer: {
     flex: 1,
+    position: "relative",
+  },
+  calendarSection: {
+    flex: 1,
+  },
+  exerciseSection: {
+    flexGrow: 1,
+    borderTopWidth: 1,
+    borderTopColor: "#E0E0E0",
+  },
+  floatingButton: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+  },
+  floatingButtonText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });
 
